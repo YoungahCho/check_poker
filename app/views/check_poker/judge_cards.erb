@@ -1,0 +1,17 @@
+<title>Check a Poker Hand</title>
+<h1>Check a Poker Hand</h1>
+
+
+<img src="/poker.jpg"></img><br>
+
+入力したカード<br>
+<%= @cards %><br>
+
+<br>判定結果<br>
+<% if @errors %>
+  <% @errors.each do |error| %>
+    <li><%= error %></li>
+  <% end  %>
+<% else %>
+  <%= @check_result %>
+<% end %>
