@@ -1,5 +1,5 @@
 module Poker
-  class Check_cards < Grape::API
+  class CheckCards < Grape::API
     version 'v1', using: :path
     format :json
 
@@ -7,9 +7,12 @@ module Poker
       desc '判定ロジック'
       post 'check_cards' do
         params[:cards]
+        # cards = ["D2 H5 H4 C2 D13", "S10 S9 S13 S7 S13"]
         response = {}
         check_result = []
         errors = []
+
+        # hands = params[:cards].map { |cards| CheckService.check_cards(cards) }
 
         params[:cards].each do |cards|
           if ValidateService.validate_cards(cards).any?
@@ -21,21 +24,32 @@ module Poker
           else
             result_hash = {
               'card' => cards,
-              'hand' => CheckService.check_cards(cards)
-              # 'best' => CheckService.check_best(hand_score)
+              'hand' => CheckService.check_cards(cards),
             }
             check_result.push(result_hash)
-            end
-
-          if errors.present?
-            response[:error] = errors
-          else
-            response[:result] = check_result
           end
+
+          response[:result] = check_result
+          response[:error] = errors
+          # response[:result] = [{"card"=>"D2 H5 H4 C2 D13", "hand"=>"One pair"}]
+          # [{"card"=>"D2 H5 H4 C2 D13", "hand"=>"One pair"}]
+        end
+
+        hands = response[:result].map { |result_hash| result_hash['hand'] }
+        print hands
+
+
+        # with_index
+        if best_index do
+          response[:best] = value
         end
 
         return response
       end
     end
   end
+  end
 end
+
+
+

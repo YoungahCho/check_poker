@@ -7,8 +7,6 @@ Rails.application.routes.draw do
 #   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   Rails.application.routes.draw do
-    mount Poker::Check_cards => '/api'
-    root 'check_poker#check_add'
-    post '/judge_cards' => 'check_poker#judge_cards'
+    mount Poker::CheckCards => '/api'
   end
 

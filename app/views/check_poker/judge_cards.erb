@@ -8,10 +8,11 @@
 <%= @cards %><br>
 
 <br>判定結果<br>
-<% if @errors %>
+<% if @errors.present? %>
   <% @errors.each do |error| %>
     <li><%= error %></li>
   <% end  %>
+
 <% else %>
   <%= @check_result %>
 <% end %>

@@ -1,3 +1,39 @@
+cards:
+  straight_flush:
+    hand: 'Straight Flush'
+    strength: 9
+
+  four_of_a_kind:
+    hand: 'Four of a kind '
+    strength: 8
+
+  full_house:
+    hand: 'Full House'
+    strength: 7
+
+  flush:
+    hand: 'Flush'
+    strength: 6
+
+  straight:
+    hand: 'Straight'
+    strength: 5
+
+  three_of_a_kind:
+    hand: 'Three of a kind'
+    strength: 4
+
+  two_pair:
+    hand: 'Two Pair'
+    strength: 3
+
+  one_pair:
+    hand: 'One Pair'
+    strength: 2
+
+  high_card:
+    hand: 'High Card'
+    strength: 1
 
 
 

@@ -2,6 +2,7 @@ module CheckService
 
   def self.check_cards(cards)
 
+
     # judge the card
     # カードを入れる配列を宣言する
     arr = []
@@ -18,7 +19,7 @@ module CheckService
       if cards[i] == ' '
         first_index += 1
         second_index = 0
-        str = ""
+        str = ''
         # 半角スペースが配列に入る場合、次の配列に入れる
       elsif second_index.zero?
         cards_array[first_index][second_index] = cards[i]
@@ -122,28 +123,24 @@ module CheckService
 
     # 最終カード判定
     if is_straight_flush
-      check_result = ("Straight flush")
+      @check_result = 'Straight flush'
     elsif is_four_of_a_kind
-      check_result = ("Four of a kind")
+      @check_result = 'Four of a kind'
     elsif is_full_house
-      check_result = ("Full house")
+      @check_result = 'Full house'
     elsif is_flush
-      check_result = ("Flush")
+      @check_result = 'Flush'
     elsif is_straight
-      check_result = ("Straight")
+      @check_result = 'Straight'
     elsif is_three_of_a_kind
-      check_result = ("Three of a kind")
+      @check_result = 'Three of a kind'
     elsif is_two_pair
-      check_result = ("Two pair")
+      @check_result = 'Two pair'
     elsif is_one_pair
-      check_result = ("One pair")
+      @check_result = 'One pair'
     else
-      is_high_card = true
-      check_result = ("High card")
+      @check_result = ('High card')
     end
-
-    return check_result
   end
-  
 end
 
