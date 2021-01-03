@@ -123,7 +123,7 @@ module CheckService
 
     # 最終カード判定
     if is_straight_flush
-      @check_result = 'Straight flush'
+      @check_result = 'Straight Flush'
     elsif is_four_of_a_kind
       @check_result = 'Four of a kind'
     elsif is_full_house
