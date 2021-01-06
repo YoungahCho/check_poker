@@ -37,44 +37,49 @@ module Poker
           end
         end
 
-        hands = check_results.map { |result_hash| result_hash['hand'] }
-        # hands = ["One pair", "Flush"]
+        check_results = CheckCards.check_best_card(check_results)
 
-        score = {
-          'Straight Flush' => 9,
-          'Four of a kind'=> 8,
-          'Full house'=> 7,
-          'Flush'=> 6,
-          'Straight'=> 5,
-          'Three of a kind'=>4,
-          'Two pair'=>3,
-          'One pair'=> 2,
-          'High card'=>1
-        }
-
-        # scores = [ 2, 6 ]
-        scores = hands.map { |hand| score[hand] }
-        best_card = score.key(scores.max)
-
-
-        check_results.each do |check_result|
-          if check_result["hand"] == best_card
-            check_result["best"] = true
-          else
-            check_result["best"] = false
-          end
-        end
-
-        if errors.present?
-         response[:result] = check_results
-         response[:error] = errors
-        else
-          response[:result] = check_results
-        end
+        response[:result] = check_results
+        response[:error] = errors
 
         return response
 
       end
     end
+
+    def self.check_best_card(check_results)
+
+      hands = check_results.map { |result_hash| result_hash['hand'] }
+      # hands = ["One pair", "Flush"]
+
+      score = {
+        'Straight Flush' => 9,
+        'Four of a kind'=> 8,
+        'Full house'=> 7,
+        'Flush'=> 6,
+        'Straight'=> 5,
+        'Three of a kind'=>4,
+        'Two pair'=>3,
+        'One pair'=> 2,
+        'High card'=>1
+      }
+
+      # scores = [ 2, 6 ]
+      scores = hands.map { |hand| score[hand] }
+      best_card = score.key(scores.max)
+
+
+      check_results.each do |check_result|
+        if check_result["hand"] == best_card
+          check_result["best"] = true
+        else
+          check_result["best"] = false
+        end
+      end
+      return check_results
+    end
+
   end
-  end
+end
+
+

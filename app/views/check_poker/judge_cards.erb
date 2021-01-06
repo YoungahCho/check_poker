@@ -1,18 +1,26 @@
 <title>Check a Poker Hand</title>
 <h1>Check a Poker Hand</h1>
+<h2>
+  <!--<table class="form"></table>-->
 
+  <img src="/poker.jpg"></img>
+  <%= form_tag({controller:"check_poker", action:"input_cards"}, { method: :post }) do %>
+    <br>
+    <td><%= text_field_tag "cards", @cards, :size => "200" %></td></br>
+    </tr>
+    <tr>
+      <td><%= submit_tag("Check")%></td>
+    </tr>
+  <%end %>
 
-<img src="/poker.jpg"></img><br>
+  <br>判定結果<br>
+  <% if @errors.present? %>
+    <% @errors.each do |error| %>
+      <li><%= error %></li>
+    <% end  %>
+  <% else %>
+    <%= @check_result %>
+  <% end %>
 
-入力したカード<br>
-<%= @cards %><br>
-
-<br>判定結果<br>
-<% if @errors.present? %>
-  <% @errors.each do |error| %>
-    <li><%= error %></li>
-  <% end  %>
-
-<% else %>
-  <%= @check_result %>
-<% end %>
+</h2>
+<p>made on Ruby Trial in ~/RubymineProjects/Check_poker</p>

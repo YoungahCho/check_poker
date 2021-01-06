@@ -54,6 +54,8 @@ group :development do
   gem 'grape-entity'
   gem 'rabl'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'rspec-rails'
+  gem 'rails-controller-testing'
 end
 
 group :test do

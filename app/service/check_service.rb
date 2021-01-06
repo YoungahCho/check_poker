@@ -1,16 +1,18 @@
 module CheckService
 
   def self.check_cards(cards)
+    cards_arr = self.make_cards_array(cards)
+    self.judge_cards(cards_arr)
+  end
 
-
-    # judge the card
-    # カードを入れる配列を宣言する
+  # 配列を作る
+  def self.make_cards_array(cards)
     arr = []
     first_index = 0
     second_index = 0
     str = ''
     # suitとrankの二つの列がある２次元配列を作成する
-    cards_array = Array.new(5){Array.new(2){0}}
+    cards_array = Array.new(5) { Array.new(2) { 0 } }
 
     # suitとrankに分けて配列に入れる
     (0..cards.length - 1).each do |i|
@@ -23,18 +25,24 @@ module CheckService
         # 半角スペースが配列に入る場合、次の配列に入れる
       elsif second_index.zero?
         cards_array[first_index][second_index] = cards[i]
-          # cardsArr[i][0]の配列の箱にcards[i]を入れる
+        # cardsArr[i][0]の配列の箱にcards[i]を入れる
         second_index += 1
-          # i番目がsuitの場合
-          # suiteの次のrankの位置にいく
+        # i番目がsuitの場合
+        # suiteの次のrankの位置にいく
       else
-          # cards[i]がrankの場合
-          str.concat(cards[i])
-          # str = ""にcards[i]の文字を追加する
-          cards_array[first_index][second_index] = str
-          # 配列の[i,1]にcards[i]を入れたstrを入れる
+        # cards[i]がrankの場合
+        str.concat(cards[i])
+        # str = ""にcards[i]の文字を追加する
+        cards_array[first_index][second_index] = str
+        # 配列の[i,1]にcards[i]を入れたstrを入れる
       end
     end
+    return cards_array
+  end
+
+  # 配列を判定する
+  def self.judge_cards(card_arr)
+    cards_array = card_arr
 
     # 判定ロジックの変数
     is_straight_flush = false
@@ -49,12 +57,10 @@ module CheckService
     is_same_suit = false
     is_sequence_rank = false
     rank_array = []
-
     suit = cards_array[0][0]
-    # 最初のsuitを基準にする
 
+    # 同じスートがあるか確認する
     (1..cards_array.length - 1).each do |i|
-
       if suit != cards_array[i][0]
         is_same_suit = false
         break
@@ -63,7 +69,8 @@ module CheckService
       end
     end
 
-
+    # 連続する数字か確認
+    # ①カードの数字を並び変える
     (0..cards_array.length - 1).each do |i|
       # iが0から始まるので、最後のn番目のi=n-1までロジックに入れる
       rank_array[i] = cards_array[i][1].to_i
@@ -72,8 +79,7 @@ module CheckService
       # rankの配列を昇順で並べる
     end
 
-
-    # 並べ替えたrankの配列は連続する数字か確認する
+    # ②並べ替えたrankの配列が連続する数字か確認する
     (0..rank_array.length - 2).each do |i|
       if rank_array[i] + 1 == rank_array[i + 1]
         is_sequence_rank = true
@@ -83,7 +89,7 @@ module CheckService
       end
     end
 
-    # Straight Flush, Flush, Straight
+    # Straight Flush, Flush, Straight確認
     if is_same_suit && is_sequence_rank
       is_straight_flush = true
     end
@@ -96,30 +102,30 @@ module CheckService
       is_straight = true
     end
 
-    # same card count
+    # 同じ数字のカードが何枚あるか確認
     same_rank_array = []
-
 
     (0..rank_array.length - 1).each do |i|
       same_rank_array.push(rank_array.count(rank_array.uniq[i]))
       same_rank_array.delete(0)
     end
 
+    # 昇順に並べる
     same_rank_array = same_rank_array.sort
 
+    # その他のカード確認
     case same_rank_array
-    when [1,4]
+    when [1, 4]
       is_four_of_a_kind = true
-    when [2,3]
+    when [2, 3]
       is_full_house = true
-    when [1,1,3]
+    when [1, 1, 3]
       is_three_of_a_kind = true
-    when [1,2,2]
+    when [1, 2, 2]
       is_two_pair = true
-    when [1,1,1,2]
+    when [1, 1, 1, 2]
       is_one_pair = true
     end
-
 
     # 最終カード判定
     if is_straight_flush
@@ -139,8 +145,7 @@ module CheckService
     elsif is_one_pair
       @check_result = 'One pair'
     else
-      @check_result = ('High card')
+      @check_result = 'High card'
     end
   end
 end
-
