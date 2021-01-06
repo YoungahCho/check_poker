@@ -64,6 +64,9 @@
     <orderEntry type="library" scope="PROVIDED" name="dry-types (v1.4.0, rbenv: 2.4.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="erubi (v1.10.0, rbenv: 2.4.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="execjs (v2.7.0, rbenv: 2.4.7) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="factory_bot (v5.2.0, rbenv: 2.4.7) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="factory_bot_rails (v5.2.0, rbenv: 2.4.7) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="faker (v2.12.0, rbenv: 2.4.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ffi (v1.13.1, rbenv: 2.4.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="globalid (v0.4.2, rbenv: 2.4.7) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="grape (v1.5.1, rbenv: 2.4.7) [gem]" level="application" />
@@ -145,6 +148,10 @@
         <option value="channel" />
         <option value="coffee:assets" />
         <option value="controller" />
+        <option value="erb:controller" />
+        <option value="erb:mailer" />
+        <option value="erb:scaffold" />
+        <option value="factory_bot:model" />
         <option value="generator" />
         <option value="helper" />
         <option value="integration_test" />
@@ -191,6 +198,10 @@
         <option value="channel" />
         <option value="coffee:assets" />
         <option value="controller" />
+        <option value="erb:controller" />
+        <option value="erb:mailer" />
+        <option value="erb:scaffold" />
+        <option value="factory_bot:model" />
         <option value="generator" />
         <option value="helper" />
         <option value="integration_test" />
@@ -391,8 +402,8 @@
           <RakeTaskImpl id="spec">
             <subtasks>
               <RakeTaskImpl description="Run the code examples in spec/api" fullCommand="spec:api" id="api" />
-              <RakeTaskImpl description="Run the code examples in spec/controller" fullCommand="spec:controller" id="controller" />
-              <RakeTaskImpl description="Run the code examples in spec/service" fullCommand="spec:service" id="service" />
+              <RakeTaskImpl description="Run the code examples in spec/controllers" fullCommand="spec:controllers" id="controllers" />
+              <RakeTaskImpl description="Run the code examples in spec/serivce" fullCommand="spec:serivce" id="serivce" />
             </subtasks>
           </RakeTaskImpl>
           <RakeTaskImpl description="Report code statistics (KLOCs, etc) from the application or engine" fullCommand="stats" id="stats" />

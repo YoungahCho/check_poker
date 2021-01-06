@@ -1,4 +1,5 @@
 module Poker
+  require 'grape'
   class CheckCards < Grape::API
     version 'v1', using: :path
     format :json
