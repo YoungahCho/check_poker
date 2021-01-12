@@ -1,8 +1,8 @@
 module CheckService
 
   def self.check_cards(cards)
-    cards_arr = self.make_cards_array(cards)
-    self.judge_cards(cards_arr)
+    cards_arr = make_cards_array(cards)
+    judge_cards(cards_arr)
   end
 
   # 配列を作る
@@ -37,7 +37,7 @@ module CheckService
         # 配列の[i,1]にcards[i]を入れたstrを入れる
       end
     end
-    return cards_array
+    cards_array
   end
 
   # 配列を判定する
@@ -57,6 +57,8 @@ module CheckService
     is_same_suit = false
     is_sequence_rank = false
     rank_array = []
+    
+    # 1番目のスートを基準にする
     suit = cards_array[0][0]
 
     # 同じスートがあるか確認する
@@ -72,7 +74,6 @@ module CheckService
     # 連続する数字か確認
     # ①カードの数字を並び変える
     (0..cards_array.length - 1).each do |i|
-      # iが0から始まるので、最後のn番目のi=n-1までロジックに入れる
       rank_array[i] = cards_array[i][1].to_i
       # 文字列で受け取ったrankをintegerで変換
       rank_array = rank_array.sort
@@ -90,17 +91,11 @@ module CheckService
     end
 
     # Straight Flush, Flush, Straight確認
-    if is_same_suit && is_sequence_rank
-      is_straight_flush = true
-    end
+    is_straight_flush = true if is_same_suit && is_sequence_rank
 
-    if is_same_suit
-      is_flush = true
-    end
+    is_flush = true if is_same_suit
 
-    if is_sequence_rank
-      is_straight = true
-    end
+    is_straight = true if is_sequence_rank
 
     # 同じ数字のカードが何枚あるか確認
     same_rank_array = []
@@ -128,24 +123,24 @@ module CheckService
     end
 
     # 最終カード判定
-    if is_straight_flush
-      @check_result = 'Straight Flush'
-    elsif is_four_of_a_kind
-      @check_result = 'Four of a kind'
-    elsif is_full_house
-      @check_result = 'Full house'
-    elsif is_flush
-      @check_result = 'Flush'
-    elsif is_straight
-      @check_result = 'Straight'
-    elsif is_three_of_a_kind
-      @check_result = 'Three of a kind'
-    elsif is_two_pair
-      @check_result = 'Two pair'
-    elsif is_one_pair
-      @check_result = 'One pair'
-    else
-      @check_result = 'High card'
-    end
+    @check_result = if is_straight_flush
+                      'Straight Flush'
+                    elsif is_four_of_a_kind
+                      'Four of a kind'
+                    elsif is_full_house
+                      'Full house'
+                    elsif is_flush
+                      'Flush'
+                    elsif is_straight
+                      'Straight'
+                    elsif is_three_of_a_kind
+                      'Three of a kind'
+                    elsif is_two_pair
+                      'Two pair'
+                    elsif is_one_pair
+                      'One pair'
+                    else
+                      'High card'
+                    end
   end
 end

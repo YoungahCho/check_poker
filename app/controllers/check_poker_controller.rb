@@ -11,9 +11,4 @@ class CheckPokerController < ApplicationController
     end
     @cards = params[:cards]
   end
-
-  puts
-  print @cards
-  puts
-
 end

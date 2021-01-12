@@ -4,7 +4,7 @@
   <!--<table class="form"></table>-->
 
   <img src="/poker.jpg"></img>
-  <%= form_tag({controller:"check_poker", action:"input_cards"}, { method: :post }) do %>
+  <%= form_tag('/', method: :post) do %>
     <br>
     <td><%= text_field_tag "cards", @cards, :size => "200" %></td></br>
     </tr>
