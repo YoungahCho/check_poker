@@ -36,8 +36,9 @@ describe 'PokerAPI', type: :request do
       it 'report 400 error' do
         post '/api/v1/poker/check_cards', params: params, as: :json
         json = JSON.parse(response.body)
+
         expect(response.status).to eq(400)
-        expect(json['messages']).to eq('リクエストのbodyが配列ではありません。')
+        expect(json['error']).to eq([{ 'msg' => 'リクエストのbodyが配列ではありません。' }])
       end
     end
 
@@ -48,7 +49,7 @@ describe 'PokerAPI', type: :request do
         json = JSON.parse(response.body)
 
         expect(response.status).to eq(400)
-        expect(json['messages']).to eq('配列の要素123が文字列ではありません。' )
+        expect(json['error']).to ([{ 'msg' => '配列の要素123が文字列ではありません。' }])
       end
     end
 

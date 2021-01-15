@@ -24,9 +24,9 @@ module Poker
 
         #paramsのバリデーション
         not_array = !(cards_strs.is_a?(Array))
-        error!({ messages: "リクエストのbodyが配列ではありません。" }, 400) if not_array
+        error!([{ 'msg' => 'リクエストのbodyが配列ではありません。' }], 400) if not_array
         not_strings = cards_strs.reject { |a| a.is_a?(String) }
-        error!({ messages: "配列の要素#{not_strings.join(', ')}が文字列ではありません。" }, 400) if not_strings.present?
+        error!([{ 'msg' => "配列の要素#{not_strings.join(', ')}が文字列ではありません。" }], 400) if not_strings.present?
 
         cards_strs.each do |cards|
           error_msgs = ValidateService.validate_cards(cards)
@@ -88,5 +88,3 @@ module Poker
 
   end
 end
-
-

@@ -8,18 +8,19 @@ module CheckService
   # 配列を作る
   def self.make_cards_array(cards)
 
-    splited_cards = cards.split(/[[:space:]]/)
-    splited_cards.map do |cards_char|
+    split_cards = cards.split(/[[:space:]]/)
+    split_cards.map do |cards_char|
       [cards_char[0], cards_char[1..2].to_i]
     end
   end
 
   # 配列を判定する
   def self.judge_cards(card)
+    # split_cards = card
 
     # 同じスートなのか確認
     suits = card.map { |c| c[0] }
-    is_same_suit = suits.uniq.length == 1
+    is_all_same_suit = suits.uniq.length == 1
 
     # 連続する数字か確認
     # ①カードの数字を並び変える
@@ -44,13 +45,13 @@ module CheckService
     same_numbers.sort!
 
     # 最終カード判定
-    @check_result =  if is_same_suit && is_sequence_rank
+    @check_result =  if is_all_same_suit && is_sequence_rank
                        'Straight Flush'
                      elsif same_numbers == [1, 4]
                        'Four of a kind'
                      elsif same_numbers == [2, 3]
                        'Full house'
-                     elsif is_same_suit
+                     elsif is_all_same_suit
                        'Flush'
                      elsif is_sequence_rank
                        'Straight'
