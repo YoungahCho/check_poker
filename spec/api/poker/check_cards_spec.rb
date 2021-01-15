@@ -1,62 +1,99 @@
 require 'rails_helper'
 
 describe 'PokerAPI', type: :request do
-  context 'correct request'
-  params = {cards: ['S12 C12 D12 S5 C3', 'D11 S11 S10 C10 S9', 'C7 C6 C5 C4 C3'] }
 
-  it 'check the hand & best card' do
-    post '/api/v1/poker/check_cards', params: params
-    json = JSON.parse(response.body)
+  describe 'correct request' do
+    let(:params) { { cards: ['S12 C12 D12 S5 C3', 'D11 S11 S10 C10 S9', 'C7 C6 C5 C4 C3'] } }
 
-    expect(response.status).to eq(201)
+    it 'check the hand & best card' do
+      post '/api/v1/poker/check_cards', params: params, as: :json
+      json = JSON.parse(response.body)
 
-    expect(json['result'][0]['card']).to eq('S12 C12 D12 S5 C3')
-    expect(json['result'][0]['hand']).to eq('Three of a kind')
-    expect(json['result'][0]['best']).to eq(false)
+      expect(response.status).to eq(201)
 
-    expect(json['result'][1]['card']).to eq('D11 S11 S10 C10 S9')
-    expect(json['result'][1]['hand']).to eq('Two pair')
-    expect(json['result'][1]['best']).to eq(false)
+      expect(json['result'].size).to eq 3
+      expect(json['result']).to include({ 'card' => 'S12 C12 D12 S5 C3', 'hand' => 'Three of a kind', 'best' => false })
+      expect(json['result']).to include({ 'card' => 'D11 S11 S10 C10 S9', 'hand' => 'Two pair', 'best' => false })
+      expect(json['result']).to include({ 'card' => 'C7 C6 C5 C4 C3', 'hand' => 'Straight Flush', 'best' => true })
+    end
+  end
 
-    expect(json['result'][2]['card']).to eq('C7 C6 C5 C4 C3')
-    expect(json['result'][2]['hand']).to eq('Straight Flush')
-    expect(json['result'][2]['best']).to eq(true)
+  describe 'API error check' do
+
+    context 'incorrect params name' do
+      let(:params) { { car: ['S12 C12 D12 S5 C3', 'D11 S11 S10 C10 S9'] } }
+      it 'report 400 error' do
+        post '/api/v1/poker/check_cards', params: params, as: :json
+        json = JSON.parse(response.body)
+
+        expect(response.status).to eq(400)
+        expect(json['error']).to eq('cards をパラメーター名にしてください')
+      end
+    end
+
+    context 'request not array ' do
+      let(:params) { { cards: 123 } }
+      it 'report 400 error' do
+        post '/api/v1/poker/check_cards', params: params, as: :json
+        json = JSON.parse(response.body)
+        expect(response.status).to eq(400)
+        expect(json['messages']).to eq('リクエストのbodyが配列ではありません。')
+      end
+    end
+
+    context 'request not string' do
+      let(:params) { { cards: [123] } }
+      it 'report 400 error' do
+        post '/api/v1/poker/check_cards', params: params, as: :json
+        json = JSON.parse(response.body)
+
+        expect(response.status).to eq(400)
+        expect(json['messages']).to eq('配列の要素123が文字列ではありません。' )
+      end
+    end
+
+  end
+
+  describe 'incorrect params' do
+
+    context 'correct params & incorrect params' do
+      let(:params) { { cards: ['S1 S2 S3 S4 S5', 'X1 D6 s10 C6'] } }
+
+      it 'return result & error' do
+        post '/api/v1/poker/check_cards', params: params, as: :json
+        json = JSON.parse(response.body)
+        expect(json['result'].size).to eq 1
+        expect(json['result']).to include({ 'card' => params[:cards][0], 'hand' => 'Straight Flush', 'best' => true })
+
+        expect(json['error'].size).to eq 5
+        expect(json['error']).to include({ 'card' => params[:cards][1], 'msg' => 'カードが5枚未満です。' })
+        expect(json['error']).to include({ 'card' => params[:cards][1], 'msg' => '1番目のカード指定文字が不正です。(X1)' })
+        expect(json['error']).to include({ 'card' => params[:cards][1], 'msg' => '3番目のカード指定文字が不正です。(s10)' })
+        expect(json['error']).to include({ 'card' => params[:cards][1], 'msg' => '5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）' })
+        expect(json['error']).to include({ 'card' => params[:cards][1], 'msg' => '半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。' })
+      end
+    end
+
+    context 'all incorrect params' do
+      let(:params) { { cards: ['S1 S2 S3　S4 S5', 'H5 S12 D10 C6 T1'] } }
+      it 'return errors' do
+        post '/api/v1/poker/check_cards', params: params, as: :json
+        json = JSON.parse(response.body)
+
+        expect(json['error'].size).to eq 7
+        expect(json['error']).to include({ 'card' => params[:cards][0], 'msg' => 'カードが5枚未満です。' })
+        expect(json['error']).to include({ 'card' => params[:cards][0], 'msg' => '3番目のカード指定文字が不正です。(S3　S4)' })
+        expect(json['error']).to include({ 'card' => params[:cards][0], 'msg' => '全角スペースが含まれています。(S3　S4)' })
+        expect(json['error']).to include({ 'card' => params[:cards][0], 'msg' => '5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）' })
+        expect(json['error']).to include({ 'card' => params[:cards][0], 'msg' => '半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。' })
+
+        expect(json['error']).to include({ 'card' => params[:cards][1], 'msg' => '5番目のカード指定文字が不正です。(T1)' })
+        expect(json['error']).to include({ 'card' => params[:cards][1], 'msg' => '半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。' })
+      end
+
+    end
   end
 end
 
-context 'incorrect params name' do
-  params = { car: ['S12 C12 D12 S5 C3', 'D11 S11 S10 C10 S9'] }
 
-  it 'report 400 error' do
-    post '/api/v1/poker/check_cards', params: params
-    json = JSON.parse(response.body)
-
-    expect(response.status).to eq(400)
-  end
-end
-
-context 'incorrect params' do
-  params = { cards: ['S1 S2 S3 S4 S5', 'X1 D6 s10 C6'] }
-
-  it 'return result & error' do
-    post '/api/v1/poker/check_cards', params: params
-    json = JSON.parse(response.body)
-
-    expect(json['result'][0]['card']).to eq(params[:cards][0])
-    expect(json['result'][0]['hand']).to eq('Straight Flush')
-    expect(json['result'][0]['best']).to eq(true)
-
-    expect(json['error'][0]['card']).to eq(params[:cards][1])
-    expect(json['error'][0]['msg']).to eq('カードが5枚未満です。')
-
-    expect(json['error'][1]['card']).to eq(params[:cards][1])
-    expect(json['error'][1]['msg']).to eq('1番目のカード指定文字が不正です。(X1)')
-
-    expect(json['error'][2]['card']).to eq(params[:cards][1])
-    expect(json['error'][2]['msg']).to eq('3番目のカード指定文字が不正です。(s10)')
-
-    expect(json['error'][3]['card']).to eq(params[:cards][1])
-    expect(json['error'][3]['msg']).to eq('5つのカード指定文字を半角スペース区切りで入力してください。（例：S1 H3 D9 C13 S11）')
-  end
-end
 

@@ -10,7 +10,7 @@ RSpec.describe CheckService do
       end
     end
 
-    context '4 same rank' do
+    context '4 same numbers' do
       let(:cards) { 'D5 D6 H6 S6 C6' }
       it 'Four of a kind' do
         result = CheckService.check_cards(cards)
@@ -18,7 +18,7 @@ RSpec.describe CheckService do
       end
     end
 
-    context '3 same rank & 2 same rank' do
+    context '3 same numbers & 2 same numbers' do
       let(:cards) { 'H9 C9 S9 H1 C1' }
       it 'Four of a kind' do
         result = CheckService.check_cards(cards)
@@ -42,7 +42,7 @@ RSpec.describe CheckService do
       end
     end
 
-    context '3 same rank' do
+    context '3 same numbers' do
       let(:cards) { 'S12 C12 D12 S5 C3' }
       it 'Three of a kind' do
         result = CheckService.check_cards(cards)
@@ -50,7 +50,7 @@ RSpec.describe CheckService do
       end
     end
 
-    context '2 same rank & 2 same rank' do
+    context '2 same numbers & 2 same numbers' do
       let(:cards) { 'D11 S11 S10 C10 S9' }
       it 'Two pair' do
         result = CheckService.check_cards(cards)
@@ -58,7 +58,7 @@ RSpec.describe CheckService do
       end
     end
 
-    context '2 same rank' do
+    context '2 same numbers' do
       let(:cards) { 'C10 S10 S6 H4 H2' }
       it 'One pair' do
         result = CheckService.check_cards(cards)

@@ -54,11 +54,13 @@ RSpec.describe CheckPokerController, type: :controller do
   end
 
   describe 'Check the error' do
-    let(:params) { {cards: 'S1 S2 S3 S4 S19' }}
+    let(:params) { { cards: 'S1 S2 S3 S4 S19' } }
 
-    it '@errors_1' do
+    it 'response error massage' do
       post :judge_cards, params: params
-      expect(assigns(:errors)).to eq  ["5番目のカード指定文字が不正です。(S19)", "半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"]
+      expect(assigns(:errors).size).to eq 2
+      expect(assigns(:errors)).to include '5番目のカード指定文字が不正です。(S19)'
+      expect(assigns(:errors)).to include '半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。'
     end
   end
 end
