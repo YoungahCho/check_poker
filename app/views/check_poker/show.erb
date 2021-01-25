@@ -1,13 +1,15 @@
 <title>Check a Poker Hand</title>
-<h1>Check a Poker Hand</h1>
-  <!--<table class="form"></table>-->
 
   <img src="/poker.jpg"></img>
   <%= form_tag('/', method: :post) do %>
-    <br>
-    <td><%= text_field_tag "cards", "S10 H11 D12 C12 H1", :size => "200" %></td></br>
+    <tr>
+      <td><%= text_field_tag "cards", @cards %></td>
     </tr>
     <tr>
       <td><%= submit_tag("Check")%></td>
     </tr>
   <%end %>
+
+  <br>判定結果<br>
+<%= @check_result %>
+

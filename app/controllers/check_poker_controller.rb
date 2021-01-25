@@ -2,13 +2,15 @@ require 'application_controller'
 
 class CheckPokerController < ApplicationController
 
-  def input_cards; end
+  def new; end
 
-  def judge_cards
+  def show
+    @cards = params[:cards]
     @errors = ValidateService.validate_cards(params[:cards])
-    if @errors.empty?
+    if @errors.present?
+      render 'new'
+    else
       @check_result = CheckService.check_cards(params[:cards])
     end
-    @cards = params[:cards]
   end
 end

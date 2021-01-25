@@ -1,0 +1,18 @@
+<title>Check a Poker Hand</title>
+
+  <img src="/poker.jpg"></img>
+  <%= form_tag('/', method: :post) do %>
+    <tr>
+      <td><%= text_field_tag "cards", "S10 H11 D12 C12 H1" %></td>
+    </tr>
+    <tr>
+      <td><%= submit_tag("Check")%></td>
+    </tr>
+  <%end %>
+
+<% if @errors.present? %>
+  <br>判定結果<br>
+  <% @errors.each do |error| %>
+    <li><%= error %></li>
+  <% end  %>
+<% end %>
