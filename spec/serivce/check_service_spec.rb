@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe CheckService do
   describe 'check_cards' do
-      let!(:result) {CheckService.check_cards(cards)}
+    let(:result) {CheckService.check_cards(cards)}
 
       context 'all same suit, sequence number' do
         let(:cards) { 'S1 S2 S3 S4 S5' }
